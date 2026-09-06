@@ -19,12 +19,8 @@ public enum TextureOverlayHudElementRenderer implements OverlayHudElementRendere
 	@Override
 	public void renderOverlay(Context context, TextureOverlayHudElement element, SpriteMaterial material, TextureAtlasSprite sprite, GuiGraphics graphics, DeltaTracker delta) {
 
-		if (!(element instanceof TextureOverlayHudElement textureOverlay)) {
-			return;
-		}
-
 		Context colorContext = context.forChild(".color");
-		int color = textureOverlay.color().intValue(colorContext);
+		int color = element.color().intValue(colorContext);
 
 		float x1 = 0.0F;
 		float x2 = x1 + graphics.guiWidth();
