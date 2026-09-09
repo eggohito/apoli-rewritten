@@ -15,7 +15,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,18 +45,9 @@ public record ItemAttributeNumberProvider(Holder<Attribute> attribute, ItemProvi
 
 	@Override
 	public double getDouble(Context context) {
-
-		Context itemContext = context.forChild(".item");
-		ItemStack item = item().getItem(itemContext);
-
-		if (itemContext.hasProblems()) {
-			return 0.0D;
-		}
-
-		else {
-			return this.compute(context, item.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY));
-		}
-
+		return item().getItem(context.forChild(".item"))
+			.map(item -> this.compute(context, item.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY)))
+			.orElse(0.0D);
 	}
 
 	@Override

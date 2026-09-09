@@ -29,18 +29,14 @@ public record ItemCountMaxNumberProvider(ItemProvider item) implements NumberPro
 
 	@Override
 	public double getDouble(Context context) {
+		return this.getLong(context);
+	}
 
-		Context itemContext = context.forChild(".item");
-		ItemStack item = item().getItem(itemContext);
-
-		if (itemContext.hasProblems()) {
-			return 0;
-		}
-
-		else {
-			return item.getMaxStackSize();
-		}
-
+	@Override
+	public long getLong(Context context) {
+		return item().getItem(context.forChild(".item"))
+			.map(ItemStack::getMaxStackSize)
+			.orElse(0);
 	}
 
 	@Override

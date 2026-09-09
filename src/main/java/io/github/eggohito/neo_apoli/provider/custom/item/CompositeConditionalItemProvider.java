@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public record CompositeConditionalItemProvider(List<CompositeConditional.Entry<ItemProvider>> entries, ItemProvider defaultValue) implements ItemProvider, CompositeConditionalValueProvider<ItemProvider> {
 
@@ -25,7 +26,7 @@ public record CompositeConditionalItemProvider(List<CompositeConditional.Entry<I
 	}
 
 	@Override
-	public @NotNull ItemStack getItem(Context context) {
+	public Optional<ItemStack> getItem(Context context) {
 		return this.getOrDefault(context, ItemProvider::getItem);
 	}
 

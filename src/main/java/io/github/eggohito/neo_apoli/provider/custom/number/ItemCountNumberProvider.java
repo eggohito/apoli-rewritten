@@ -29,18 +29,14 @@ public record ItemCountNumberProvider(ItemProvider item) implements NumberProvid
 
 	@Override
 	public double getDouble(Context context) {
+		return this.getLong(context);
+	}
 
-		Context itemContext = context.forChild(".item");
-		ItemStack item = item().getItem(itemContext);
-
-		if (itemContext.hasProblems()) {
-			return 0;
-		}
-
-		else {
-			return item.getCount();
-		}
-
+	@Override
+	public long getLong(Context context) {
+		return item().getItem(context.forChild(".item"))
+			.map(ItemStack::getCount)
+			.orElse(0);
 	}
 
 	@Override

@@ -7,7 +7,6 @@ import io.github.eggohito.neo_apoli.provider.custom.item.ItemProvider;
 import io.github.eggohito.neo_apoli.registry.provider.NeoApoliNumberProviderTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public record ItemFuelNumberProvider(ItemProvider item) implements NumberProvider {
@@ -29,18 +28,14 @@ public record ItemFuelNumberProvider(ItemProvider item) implements NumberProvide
 
 	@Override
 	public double getDouble(Context context) {
+		return this.getLong(context);
+	}
 
-		Context itemContext = context.forChild(".item");
-		ItemStack item = item().getItem(itemContext);
-
-		if (itemContext.hasProblems()) {
-			return 0;
-		}
-
-		else {
-			return context.level().fuelValues().burnDuration(item);
-		}
-
+	@Override
+	public long getLong(Context context) {
+		return item().getItem(context.forChild(".item"))
+			.map(context.level().fuelValues()::burnDuration)
+			.orElse(0);
 	}
 
 	@Override

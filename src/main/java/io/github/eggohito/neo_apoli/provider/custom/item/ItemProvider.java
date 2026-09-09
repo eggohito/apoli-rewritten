@@ -15,6 +15,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public interface ItemProvider extends ValueProvider {
 
 	Codec<ItemProvider> CODEC = Codec.lazyInitialized(() -> new MultiAlternativeCodec<>(Type.CODEC.dispatch(ItemProvider::getType, Type::mapCodec), ContextItemProvider.INLINE_CODEC));
@@ -24,8 +26,7 @@ public interface ItemProvider extends ValueProvider {
 	@Override
 	ItemProvider.@NotNull Type<?> getType();
 
-	@NotNull
-	ItemStack getItem(Context context);
+	Optional<ItemStack> getItem(Context context);
 
 	record Type<P extends ItemProvider>(MapCodec<P> mapCodec, StreamCodec<RegistryFriendlyByteBuf, P> streamCodec) implements ValueProvider.Type<P> {
 

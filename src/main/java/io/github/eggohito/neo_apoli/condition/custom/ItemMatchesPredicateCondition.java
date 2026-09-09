@@ -12,7 +12,6 @@ import io.github.eggohito.neo_apoli.util.ParsedArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 
 public record ItemMatchesPredicateCondition(ParsedArgument<ItemPredicateArgument.Result> predicate, ItemProvider item) implements Condition {
 
@@ -34,13 +33,9 @@ public record ItemMatchesPredicateCondition(ParsedArgument<ItemPredicateArgument
 
 	@Override
 	public boolean test(Context context) {
-
-		Context itemContext = context.forChild(".item");
-		ItemStack item = item().getItem(itemContext);
-
-		return !itemContext.hasProblems()
-			&& predicate().argument().test(item);
-
+		return item().getItem(context.forChild(".item"))
+			.map(predicate().argument()::test)
+			.orElse(false);
 	}
 
 	@Override

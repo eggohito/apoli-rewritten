@@ -12,6 +12,7 @@ import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.Set;
 
 public record ContextItemProvider(Context.Parameter<ItemStack> parameter) implements ItemProvider {
@@ -37,13 +38,13 @@ public record ContextItemProvider(Context.Parameter<ItemStack> parameter) implem
 	}
 
 	@Override
-	public @NotNull ItemStack getItem(Context context) {
+	public Optional<ItemStack> getItem(Context context) {
 
 		if (!context.hasParameter(parameter())) {
 			context.reportProblem("Parameter \"" + parameter().name() + "\" is not provided in the context!");
 		}
 
-		return context.getOptional(parameter()).orElse(ItemStack.EMPTY);
+		return context.getOptional(parameter());
 
 	}
 

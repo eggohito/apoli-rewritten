@@ -12,6 +12,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public record ConditionalItemProvider(Condition condition, ItemProvider onTrue, ItemProvider onFalse) implements ItemProvider, ConditionalValueProvider<ItemProvider> {
 
 	public static final MapCodec<ConditionalItemProvider> CODEC = MapCodecUtil.lazy(ConditionalItemProvider.class.getSimpleName(), () -> ConditionalValueProvider.mapCodec(ItemProvider.CODEC, ConditionalItemProvider::new));
@@ -23,8 +25,8 @@ public record ConditionalItemProvider(Condition condition, ItemProvider onTrue, 
 	}
 
 	@Override
-	public @NotNull ItemStack getItem(Context context) {
-		return this.getValue(context, ItemProvider::getItem, ItemStack.EMPTY);
+	public Optional<ItemStack> getItem(Context context) {
+		return this.getValue(context, ItemProvider::getItem, Optional.empty());
 	}
 
 }

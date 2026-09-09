@@ -8,7 +8,6 @@ import io.github.eggohito.neo_apoli.provider.custom.item.ItemProvider;
 import io.github.eggohito.neo_apoli.registry.NeoApoliConditionTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public record ItemMatchesIngredientCondition(Ingredient ingredient, ItemProvider item) implements Condition {
@@ -31,13 +30,9 @@ public record ItemMatchesIngredientCondition(Ingredient ingredient, ItemProvider
 
 	@Override
 	public boolean test(Context context) {
-
-		Context itemContext = context.forChild(".item");
-		ItemStack item = item().getItem(itemContext);
-
-		return !itemContext.hasProblems()
-			&& ingredient().test(item);
-
+		return item().getItem(context.forChild(".item"))
+			.map(ingredient()::test)
+			.orElse(false);
 	}
 
 	@Override
