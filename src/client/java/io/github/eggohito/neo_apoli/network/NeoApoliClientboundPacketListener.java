@@ -4,8 +4,8 @@ import io.github.eggohito.neo_apoli.duck.internal.CommandStorageHolder;
 import io.github.eggohito.neo_apoli.duck.internal.PowerRecipeDisplayHolder;
 import io.github.eggohito.neo_apoli.network.packet.HandshakePacket;
 import io.github.eggohito.neo_apoli.network.packet.clientbound.ClientboundCommandStorageUpdatePacket;
-import io.github.eggohito.neo_apoli.network.packet.clientbound.ClientboundPowerDataUpdatePacket;
 import io.github.eggohito.neo_apoli.network.packet.clientbound.ClientboundPowerRecipeDisplaysUpdatePacket;
+import io.github.eggohito.neo_apoli.network.packet.clientbound.ClientboundUpdatePowerDataPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -22,7 +22,7 @@ public final class NeoApoliClientboundPacketListener {
 
 		ClientPlayConnectionEvents.INIT.register((handler, client) -> {
 			ClientPlayNetworking.registerReceiver(ClientboundCommandStorageUpdatePacket.TYPE, (payload, context) -> payload.handle((CommandStorageHolder) context.client()));
-			ClientPlayNetworking.registerReceiver(ClientboundPowerDataUpdatePacket.TYPE, (payload, context) -> payload.handle(context.player().level()));
+			ClientPlayNetworking.registerReceiver(ClientboundUpdatePowerDataPacket.TYPE, (payload, context) -> payload.handle(context.player().level()));
 			ClientPlayNetworking.registerReceiver(ClientboundPowerRecipeDisplaysUpdatePacket.TYPE, (payload, context) -> payload.handle((PowerRecipeDisplayHolder) context.client()));
 		});
 

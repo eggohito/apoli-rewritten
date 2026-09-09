@@ -8,7 +8,8 @@ import io.github.eggohito.neo_apoli.NeoApoli;
 import io.github.eggohito.neo_apoli.condition.Condition;
 import io.github.eggohito.neo_apoli.context.Context;
 import io.github.eggohito.neo_apoli.context.ContextUser;
-import io.github.eggohito.neo_apoli.network.packet.clientbound.ClientboundPowerDataUpdatePacket;
+import io.github.eggohito.neo_apoli.network.packet.clientbound.ClientboundUpdatePowerDataPacket;
+import io.github.eggohito.neo_apoli.power.entity.Powers;
 import io.github.eggohito.neo_apoli.power.manager.PowerManager;
 import io.github.eggohito.neo_apoli.registry.NeoApoliRegistries;
 import io.github.eggohito.neo_apoli.registry.NeoApoliRegistryKeys;
@@ -27,6 +28,7 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -108,23 +110,27 @@ public interface Power extends ContextUser {
 
 		public final void syncData(Entity holder) {
 
-			Level level = holder.level();
-			RegistryOps<Tag> ops = holder.level().registryAccess().createSerializationContext(NbtOps.INSTANCE);
-
-			if (level.isClientSide()) {
-				NeoApoli.LOGGER.warn("Couldn't initialize syncing data of {} from entity {} in the client!", id.asDisplayString(false), holder.getName().getString());
+			if (!Powers.has(holder) || (holder instanceof LivingEntity living && living.isDeadOrDying())) {
+				return;
 			}
 
-			else if (!PowerManager.getInstance().contains(id)) {
-				NeoApoli.LOGGER.warn("Tried syncing instance data of unregistered {} from entity {}!", id.asDisplayString(false), holder.getName().getString());
+			Level level = holder.level();
+			RegistryOps<Tag> ops = level.registryAccess().createSerializationContext(NbtOps.INSTANCE);
+
+			if (!PowerManager.getInstance().contains(id)) {
+				NeoApoli.LOGGER.warn("Couldn't sync data of unregistered {} from entity {}!", id.asDisplayString(false), holder.getName().getString());
+			}
+
+			else if (level.isClientSide()) {
+				NeoApoli.LOGGER.warn("Couldn't sync data of {} from entity {} in the client!", id.asDisplayString(false), holder.getName().getString());
 			}
 
 			else {
 				MiscUtil.handleResult(
 					this.encodeData(ops),
-					tag -> MiscUtil.broadcastCustomToAll(holder, () -> ClientboundPowerDataUpdatePacket.single(holder.getId(), ops, id, tag)),
-					warning -> NeoApoli.LOGGER.warn("Couldn't fully encode instance data of {} to send to entity {} (sending partially encoded data): {}", id.asDisplayString(false), holder.getName().getString(), warning),
-					error -> NeoApoli.LOGGER.error("Couldn't encode instance data of {} to send to entity {}! (skipping): {}", id.asDisplayString(false), holder.getName().getString(), error)
+					tag -> MiscUtil.broadcastCustomToAll(holder, () -> new ClientboundUpdatePowerDataPacket(holder.getId(), id, tag)),
+					warning -> NeoApoli.LOGGER.warn("Found warnings while encoding data of instance for {} on entity {}: {}", id.asDisplayString(false), holder.getName().getString(), warning),
+					error -> NeoApoli.LOGGER.error("Couldn't encode and send data of instance for {} on entity {} (skipping): {}", id.asDisplayString(false), holder.getName().getString(), error)
 				);
 			}
 

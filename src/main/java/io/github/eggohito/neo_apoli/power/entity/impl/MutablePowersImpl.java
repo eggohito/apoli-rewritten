@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import io.github.eggohito.neo_apoli.NeoApoli;
 import io.github.eggohito.neo_apoli.attachment.entity.PowersAttachment;
-import io.github.eggohito.neo_apoli.network.packet.clientbound.ClientboundPowerDataUpdatePacket;
+import io.github.eggohito.neo_apoli.network.packet.clientbound.ClientboundUpdatePowerDataPacket;
 import io.github.eggohito.neo_apoli.power.Power;
 import io.github.eggohito.neo_apoli.power.PowerHolder;
 import io.github.eggohito.neo_apoli.power.PowerIdentifier;
@@ -151,7 +151,7 @@ public final class MutablePowersImpl extends AbstractPowers implements MutablePo
 					MiscUtil.handleResult(
 						oldInstance.encodeData(ops),
 						tag -> pendingDataSync.put(id, tag),
-						warning -> NeoApoli.LOGGER.warn("Couldn't fully encode old data of {} from entity {} during the update process (proceeding with partial result): {}", id.asDisplayString(false), player.getName().getString(), warning),
+						warning -> NeoApoli.LOGGER.warn("Found warnings while encoding old data of {} from entity {} during the update process: {}", id.asDisplayString(false), player.getName().getString(), warning),
 						error -> NeoApoli.LOGGER.warn("Couldn't encode old data of {} from entity {} during the update process (skipping): {}", id.asDisplayString(false), player.getName().getString(), error)
 					);
 
@@ -176,7 +176,7 @@ public final class MutablePowersImpl extends AbstractPowers implements MutablePo
 						MiscUtil.handleResult(
 							newInstance.decodeData(ops, oldData),
 							Consumers.nop(),
-							warning -> NeoApoli.LOGGER.warn("Couldn't fully decode old data of {} from entity {} during the update process (proceeding with partial result): {}", id.asDisplayString(false), player.getName().getString(), warning),
+							warning -> NeoApoli.LOGGER.warn("Found warnings while decoding old data of {} from entity {} during the update process: {}", id.asDisplayString(false), player.getName().getString(), warning),
 							error -> NeoApoli.LOGGER.warn("Couldn't decode old data of {} from entity {} during the update process (skipping): {}", id.asDisplayString(false), player.getName().getString(), error)
 						);
 					}
@@ -192,7 +192,7 @@ public final class MutablePowersImpl extends AbstractPowers implements MutablePo
 		}
 
 		if (!pendingDataSync.isEmpty()) {
-			MiscUtil.broadcastCustomToAll(player, () -> ClientboundPowerDataUpdatePacket.bulk(player.getId(), ops, pendingDataSync));
+			MiscUtil.broadcastCustomToAll(player, () -> new ClientboundUpdatePowerDataPacket(player.getId(), pendingDataSync));
 		}
 
 	}

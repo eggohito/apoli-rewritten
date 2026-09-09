@@ -17,7 +17,7 @@ public final class NeoApoliPackets {
 
 		PayloadTypeRegistry.playS2C().register(ClientboundClearCachedLogsPacket.TYPE, ClientboundClearCachedLogsPacket.CODEC);
 		PayloadTypeRegistry.playS2C().register(ClientboundCommandStorageUpdatePacket.TYPE, ClientboundCommandStorageUpdatePacket.CODEC);
-		PayloadTypeRegistry.playS2C().register(ClientboundPowerDataUpdatePacket.TYPE, ClientboundPowerDataUpdatePacket.CODEC);
+		PayloadTypeRegistry.playS2C().register(ClientboundUpdatePowerDataPacket.TYPE, ClientboundUpdatePowerDataPacket.CODEC);
 		PayloadTypeRegistry.playS2C().register(ClientboundPowerRecipeDisplaysUpdatePacket.TYPE, ClientboundPowerRecipeDisplaysUpdatePacket.CODEC);
 		PayloadTypeRegistry.playS2C().register(ClientboundUpdateNestedTagPacket.TYPE, ClientboundUpdateNestedTagPacket.CODEC);
 
