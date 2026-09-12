@@ -1,4 +1,4 @@
-package io.github.eggohito.neo_apoli.mixin.impl.misc.power_crafting;
+package io.github.eggohito.neo_apoli.mixin.impl.power.misc.crafting;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.eggohito.neo_apoli.duck.internal.PowerCrafting;

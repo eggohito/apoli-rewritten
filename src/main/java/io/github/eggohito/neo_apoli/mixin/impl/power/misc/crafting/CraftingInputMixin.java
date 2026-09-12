@@ -1,4 +1,4 @@
-package io.github.eggohito.neo_apoli.mixin.impl.misc.power_crafting;
+package io.github.eggohito.neo_apoli.mixin.impl.power.misc.crafting;
 
 import io.github.eggohito.neo_apoli.context.Context;
 import io.github.eggohito.neo_apoli.duck.internal.PowerCrafting;
