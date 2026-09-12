@@ -11,22 +11,22 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
-public record BinomialNumberProvider(NumberProvider attempts, NumberProvider probability) implements NumberProvider {
+public record RandomBinomialNumberProvider(NumberProvider attempts, NumberProvider probability) implements NumberProvider {
 
-	public static final MapCodec<BinomialNumberProvider> CODEC = MapCodecUtil.lazy(BinomialNumberProvider.class.getSimpleName(), () -> RecordCodecBuilder.mapCodec(instance -> instance.group(
-		NumberProvider.CODEC.fieldOf("attempts").forGetter(BinomialNumberProvider::attempts),
-		NumberProvider.CODEC.fieldOf("probability").forGetter(BinomialNumberProvider::probability)
-	).apply(instance, BinomialNumberProvider::new)));
+	public static final MapCodec<RandomBinomialNumberProvider> CODEC = MapCodecUtil.lazy(RandomBinomialNumberProvider.class.getSimpleName(), () -> RecordCodecBuilder.mapCodec(instance -> instance.group(
+		NumberProvider.CODEC.fieldOf("attempts").forGetter(RandomBinomialNumberProvider::attempts),
+		NumberProvider.CODEC.fieldOf("probability").forGetter(RandomBinomialNumberProvider::probability)
+	).apply(instance, RandomBinomialNumberProvider::new)));
 
-	public static final StreamCodec<RegistryFriendlyByteBuf, BinomialNumberProvider> STREAM_CODEC = StreamCodecUtil.lazy(BinomialNumberProvider.class.getSimpleName(), () -> StreamCodec.composite(
-		NumberProvider.STREAM_CODEC, BinomialNumberProvider::attempts,
-		NumberProvider.STREAM_CODEC, BinomialNumberProvider::probability,
-		BinomialNumberProvider::new
+	public static final StreamCodec<RegistryFriendlyByteBuf, RandomBinomialNumberProvider> STREAM_CODEC = StreamCodecUtil.lazy(RandomBinomialNumberProvider.class.getSimpleName(), () -> StreamCodec.composite(
+		NumberProvider.STREAM_CODEC, RandomBinomialNumberProvider::attempts,
+		NumberProvider.STREAM_CODEC, RandomBinomialNumberProvider::probability,
+		RandomBinomialNumberProvider::new
 	));
 
 	@Override
 	public @NotNull NumberProvider.Type<?> getType() {
-		return NeoApoliNumberProviderTypes.BINOMIAL;
+		return NeoApoliNumberProviderTypes.RANDOM_BINOMIAL;
 	}
 
 	@Override

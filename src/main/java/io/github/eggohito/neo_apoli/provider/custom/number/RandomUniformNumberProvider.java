@@ -15,26 +15,26 @@ import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.random.RandomGenerator;
 
-public record UniformNumberProvider(Random random, NumberProvider min, NumberProvider max) implements NumberProvider {
+public record RandomUniformNumberProvider(Random random, NumberProvider min, NumberProvider max) implements NumberProvider {
 
-	public static final MapCodec<UniformNumberProvider> CODEC = MapCodecUtil.lazy(UniformNumberProvider.class.getSimpleName(), () -> RecordCodecBuilder.mapCodec(instance -> instance.group(
-		NumberProvider.CODEC.optionalFieldOf("min", new ConstantNumberProvider(0)).forGetter(UniformNumberProvider::min),
-		NumberProvider.CODEC.fieldOf("max").forGetter(UniformNumberProvider::max)
-	).apply(instance, UniformNumberProvider::new)));
+	public static final MapCodec<RandomUniformNumberProvider> CODEC = MapCodecUtil.lazy(RandomUniformNumberProvider.class.getSimpleName(), () -> RecordCodecBuilder.mapCodec(instance -> instance.group(
+		NumberProvider.CODEC.optionalFieldOf("min", new ConstantNumberProvider(0)).forGetter(RandomUniformNumberProvider::min),
+		NumberProvider.CODEC.fieldOf("max").forGetter(RandomUniformNumberProvider::max)
+	).apply(instance, RandomUniformNumberProvider::new)));
 
-	public static final StreamCodec<RegistryFriendlyByteBuf, UniformNumberProvider> STREAM_CODEC = StreamCodecUtil.lazy(UniformNumberProvider.class.getSimpleName(), () -> StreamCodec.composite(
-		NumberProvider.STREAM_CODEC, UniformNumberProvider::min,
-		NumberProvider.STREAM_CODEC, UniformNumberProvider::max,
-		UniformNumberProvider::new
+	public static final StreamCodec<RegistryFriendlyByteBuf, RandomUniformNumberProvider> STREAM_CODEC = StreamCodecUtil.lazy(RandomUniformNumberProvider.class.getSimpleName(), () -> StreamCodec.composite(
+		NumberProvider.STREAM_CODEC, RandomUniformNumberProvider::min,
+		NumberProvider.STREAM_CODEC, RandomUniformNumberProvider::max,
+		RandomUniformNumberProvider::new
 	));
 
-	public UniformNumberProvider(NumberProvider min, NumberProvider max) {
+	public RandomUniformNumberProvider(NumberProvider min, NumberProvider max) {
 		this(new Random(), min, max);
 	}
 
 	@Override
 	public @NotNull NumberProvider.Type<?> getType() {
-		return NeoApoliNumberProviderTypes.UNIFORM;
+		return NeoApoliNumberProviderTypes.RANDOM_UNIFORM;
 	}
 
 	@Override

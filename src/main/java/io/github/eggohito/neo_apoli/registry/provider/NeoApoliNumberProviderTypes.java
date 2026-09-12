@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 public final class NeoApoliNumberProviderTypes {
 
 	public static final NumberProvider.Type<AbsoluteNumberProvider> ABSOLUTE = registerInternal("absolute", AbsoluteNumberProvider.CODEC, AbsoluteNumberProvider.STREAM_CODEC);
-	public static final NumberProvider.Type<BinomialNumberProvider> BINOMIAL = registerInternal("binomial", BinomialNumberProvider.CODEC, BinomialNumberProvider.STREAM_CODEC);
 	public static final NumberProvider.Type<ClampedNumberProvider> CLAMPED = registerInternal("clamped", ClampedNumberProvider.CODEC, ClampedNumberProvider.STREAM_CODEC);
 	public static final NumberProvider.Type<CompositeConditionalNumberProvider> COMPOSITE_CONDITIONAL = registerInternal("conditional/composite", CompositeConditionalNumberProvider.CODEC, CompositeConditionalNumberProvider.STREAM_CODEC);
 	public static final NumberProvider.Type<ConditionalNumberProvider> CONDITIONAL = registerInternal("conditional", ConditionalNumberProvider.CODEC, ConditionalNumberProvider.STREAM_CODEC);
@@ -27,8 +26,9 @@ public final class NeoApoliNumberProviderTypes {
 	public static final NumberProvider.Type<PowerNumberProvider> POWER = registerInternal("power", PowerNumberProvider.CODEC, PowerNumberProvider.STREAM_CODEC);
 	public static final NumberProvider.Type<ProductNumberProvider> PRODUCT = registerInternal("product", ProductNumberProvider.CODEC, ProductNumberProvider.STREAM_CODEC);
 	public static final NumberProvider.Type<QuotientNumberProvider> QUOTIENT = registerInternal("quotient", QuotientNumberProvider.CODEC, QuotientNumberProvider.STREAM_CODEC);
+	public static final NumberProvider.Type<RandomBinomialNumberProvider> RANDOM_BINOMIAL = registerInternal("random/binomial", RandomBinomialNumberProvider.CODEC, RandomBinomialNumberProvider.STREAM_CODEC);
+	public static final NumberProvider.Type<RandomUniformNumberProvider> RANDOM_UNIFORM = registerInternal("random/uniform", RandomUniformNumberProvider.CODEC, RandomUniformNumberProvider.STREAM_CODEC);
 	public static final NumberProvider.Type<SumNumberProvider> SUM = registerInternal("sum", SumNumberProvider.CODEC, SumNumberProvider.STREAM_CODEC);
-	public static final NumberProvider.Type<UniformNumberProvider> UNIFORM = registerInternal("uniform", UniformNumberProvider.CODEC, UniformNumberProvider.STREAM_CODEC);
 	public static final NumberProvider.Type<WeightedNumberProvider> WEIGHTED = registerInternal("weighted", WeightedNumberProvider.CODEC, WeightedNumberProvider.STREAM_CODEC);
 
 	public static final NumberProvider.Type<AdjacentBlocksNumberProvider> ADJACENT_BLOCKS = registerInternal("adjacent_blocks", AdjacentBlocksNumberProvider.CODEC, AdjacentBlocksNumberProvider.STREAM_CODEC);
